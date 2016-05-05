@@ -1,0 +1,507 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>PTcheck</title>
+    <style type="text/css">
+        user_icon
+        {
+            color: #FFFFFF;
+        }
+        html
+        {
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        body, td, th
+        {
+            font-family: "微软雅黑";
+            font-size: 12px;
+        }
+        h1, h2, h3, h4, h5, h6
+        {
+            font-family: "宋体";
+        }
+        p
+        {
+            margin-bottom: 10px;
+        }
+        demo_padding
+        {
+            line-height: 30px;
+        }
+        .zhengwen
+        {
+            padding-right: 15px;
+            padding-left: 5px;
+            padding-bottom: 100px;
+            font-size: 13px;
+            line-height: 20px;
+            color: #666666;
+        }
+        .zhengwencenter
+        {
+            padding-right: 15px;
+            padding-left: 0px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            line-height: 20px;
+            color: #666666;
+            text-align: center;
+        }
+        .neikuang
+        {
+            background-color: #EBEBEB;
+            border: 1px solid #999999;
+            padding-right: 10px;
+            padding-left: 10px;
+            margin-top: 10px;
+            margin-left: 25px;
+            width: 300px;
+        }
+        .shubu
+        {
+            height: 20px;
+            width: 20px;
+            margin-left: 25px;
+            background-color: #FFFFFF;
+            border: 1px solid #999999;
+            text-align: center;
+            vertical-align: middle;
+            display: block;
+            color: #666666;
+        }
+        a.red:link
+        {
+            color: #FF0000;
+        }
+        a.red:visited
+        {
+            color: #FF0000;
+        }
+        a.red:hover
+        {
+            color: #000000;
+        }
+        a.red:active
+        {
+            color: #000000;
+        }
+        a.orange:link
+        {
+            color: #FF6600;
+        }
+        a.orange:visited
+        {
+            color: #FF6600;
+        }
+        a.orange:hover
+        {
+            color: #000000;
+        }
+        a.orange:active
+        {
+            color: #000000;
+        }
+        a.dark:link
+        {
+            color: #666666;
+        }
+        a.dark:visited
+        {
+            color: #666666;
+        }
+        a.dark:hover
+        {
+            color: #000000;
+        }
+        a.dark:active
+        {
+            color: #000000;
+        }
+        a.pagelink:hover
+        {
+            color: #000000;
+        }
+        a.pagelink:active
+        {
+            color: #000000;
+        }
+        .green
+        {
+            color: #008000;
+        }
+        .gray
+        {
+            color: #666666;
+        }
+        .red
+        {
+            color: #FF0000;
+        }
+        .orange
+        {
+            color: #FF6600;
+        }
+        a
+        {
+            text-decoration: none;
+        }
+	    .modify
+        {
+        	background: url(../../images/pen.png) no-repeat scroll center center transparent !important;
+            border: medium none;
+            cursor: pointer;
+            margin-right: 2px;
+            outline: 0 none !important;
+            width: 20px;
+            height:20px;
+        }
+        .modifyall
+        {
+        	cursor:pointer;
+        }
+    </style>
+	<script type="text/javascript">
+
+        var isstorage=false;
+        var danhao;
+        var result= new Array();
+        function myclick() {
+            window.parent.parent.ViewMain.window.location.href = "../../htmls/jianchong_.htm";
+        }
+        function submitPart(obj, target) {
+            var parent = target.parentNode;
+            var mynext = parent.nextSibling;
+            if (mynext) {
+                if (mynext.nodeName == "#text") {
+                    mynext = mynext.nextSibling;
+                }
+            }
+            if (!mynext) {
+                var temphtml = document.createElement("div");
+                temphtml.innerHTML = "<input type=\"hidden\"  value=\"" + parent.firstChild.value + "\"><p style=\"color: rgb(102, 102, 102); margin: 0.5em 0px 3px; font: 99% &quot;Helvetica Neue&quot;,Arial,Helvetica,san-serif;\">改重内容（请对本句修改之后，点击“临时保存”，然后进入报告右上方“修改文档”页面中获取修改后的内容）：</p><textarea name=\"myresult\" value=\"\" style=\"width: 99%; color: rgb(0, 0, 0); padding: 0.3em; float: none; margin-bottom: 0.1em; font: 99% &quot;Helvetica Neue&quot;,Arial,Helvetica,san-serif;\" id=\"paper_content\" cols=\"20\" rows=\"8\" name=\"content\"></textarea><p style=\"padding: 0px 10px 50px 0px; text-align: right;\"><span style=\"color:red;margin-right:10px;font-size:15px;\">（注意:关闭报告网页，修改内容就会消失，改完一段请及时复制到原文）</span><input  type=\"submit\" value=\"临时保存\" name=\"Submit\" onclick=\"mysave(this)\"></p>";
+                parent.parentNode.insertBefore(temphtml, null);
+                mynext = parent.nextSibling;
+                    if (mynext.nodeName == "#text") {
+                        mynext = mynext.nextSibling;
+                    }
+              
+                mynext.lastChild.previousSibling.value = obj;
+            }
+            else {
+                parent.parentNode.removeChild(mynext);
+            }
+
+        }
+       
+        function mysave(target) {
+            var tempsen = target.parentNode.previousSibling.value.replace(/\"/g,"\\\"").replace(/\'/g,"\\\'");
+            var paraseq = target.parentNode.parentNode.firstChild.value;
+            var mydiv = target.parentNode.parentNode.previousSibling;
+            if (mydiv.nodeName == "#text") {
+                mydiv = mydiv.previousSibling;
+            }
+            mydiv.lastChild.previousSibling.setAttribute("onclick", "submitPart('" + tempsen + "',this)");
+            if (mydiv.firstChild.nextSibling.tagName.toUpperCase() != "SPAN") {
+                var xiugai = document.createElement("span");
+                xiugai.setAttribute("style", "font-size:12px;color:#00AEAE");
+                xiugai.innerHTML = "已修改";
+                mydiv.insertBefore(xiugai, mydiv.lastChild.previousSibling);
+            }
+            var parent = target.parentNode.parentNode;
+            parent.parentNode.removeChild(parent);
+            if(!isstorage)
+            {
+            window.parent.parent.myset(paraseq, tempsen);
+            }
+            else
+            {
+            myset(paraseq, tempsen);
+            }
+        }
+        window.onload = function() {
+            danhao = document.getElementById("danhao").value;
+            if (window.localStorage) {
+                isstorage = true;
+            }
+            if (!isstorage) {
+                result = window.parent.parent.modifyPara;
+
+            }
+            else {
+                var temp = localStorage.getItem(danhao);
+                if (temp) {
+                    result = eval("(" + temp + ")");
+                }
+            }
+            if (result) {
+                for (var i = 0; i < result.length; i++) {
+                    //var all = $(":hidden");
+                    var all = document.getElementsByName("hid_para");
+                    for (var j = 0; j < all.length; j++) {
+                        if (all[j].value == result[i].para) {
+                            var xiugai = document.createElement("span");
+                            xiugai.setAttribute("style", "font-size:12px;color:#00AEAE");
+                            xiugai.innerHTML = "已修改";
+                            all[j].parentNode.insertBefore(xiugai, all[j].nextSibling);
+                            all[j].nextSibling.nextSibling.setAttribute("onclick", "submitPart('" + result[i].text.replace(/\"/g,"\\\"").replace(/\'/g,"\\\'") + "',this)");
+                        }
+                    }
+
+                }
+            }  
+        }
+
+
+        function mydivclick(e,obj) {
+            if (e.target.tagName.toUpperCase() != "INPUT") {
+                obj.lastChild.previousSibling.click();
+            }
+        }
+
+        function getClass(tagname, className) { //tagname指元素，className指class的值
+            var tagname = document.getElementsByTagName(tagname);  //获取指定元素
+            var tagnameAll = [];     //这个数组用于存储所有符合条件的元素
+            for (var i = 0; i < tagname.length; i++) {     //遍历获得的元素
+                if (tagname[i].className == className) {     //如果获得的元素中的class的值等于指定的类名，就赋值给tagnameAll
+                    tagnameAll[tagnameAll.length] = tagname[i];
+                }
+            }
+            return tagnameAll;
+
+        }
+
+       
+        
+        
+         function myset(paraseq, sen) {
+            var reg = new RegExp("\"", "g")
+            var model = "{\"para\":\"" + paraseq + "\",\"text\": \"" + sen + "\"}";
+            var mo = eval("(" + model + ")");
+            var exist = false;
+            for (var i = 0; i < result.length; i++) {
+                if (mo.para == result[i].para) {
+                    exist = true;
+                    result[i].text = mo.text;
+                }
+            }
+            if (!exist) {
+                result.push(mo);
+            }
+            localStorage.removeItem(danhao);
+            localStorage.setItem(danhao, json_encode(result));
+        }
+        
+        function json_decode(str_json) {
+            // Decodes the JSON representation into a PHP value  
+            //  
+            // version: 906.1806  
+            // discuss at: http://phpjs.org/functions/json_decode  
+            // +      original by: Public Domain (http://www.json.org/json2.js)  
+            // + reimplemented by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)  
+            // + improved by: T.J. Leahy  
+            // *     example 1: json_decode('[\n    "e",\n    {\n    "pluribus": "unum"\n}\n]');  
+            // *     returns 1: ['e', {pluribus: 'unum'}]  
+            /* 
+            http://www.JSON.org/json2.js 
+            2008-11-19 
+            Public Domain. 
+            NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK. 
+            See http://www.JSON.org/js.html 
+            */
+
+            var json = this.window.JSON;
+            if (typeof json === 'object' && typeof json.parse === 'function') {
+                return json.parse(str_json);
+            }
+
+            var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
+            var j;
+            var text = str_json;
+
+            // Parsing happens in four stages. In the first stage, we replace certain  
+            // Unicode characters with escape sequences. JavaScript handles many characters  
+            // incorrectly, either silently deleting them, or treating them as line endings.  
+            cx.lastIndex = 0;
+            if (cx.test(text)) {
+                text = text.replace(cx, function(a) {
+                    return '\\u' +
+            ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+                });
+            }
+
+            // In the second stage, we run the text against regular expressions that look  
+            // for non-JSON patterns. We are especially concerned with '()' and 'new'  
+            // because they can cause invocation, and '=' because it can cause mutation.  
+            // But just to be safe, we want to reject all unexpected forms.  
+
+            // We split the second stage into 4 regexp operations in order to work around  
+            // crippling inefficiencies in IE's and Safari's regexp engines. First we  
+            // replace the JSON backslash pairs with '@' (a non-JSON character). Second, we  
+            // replace all simple value tokens with ']' characters. Third, we delete all  
+            // open brackets that follow a colon or comma or that begin the text. Finally,  
+            // we look to see that the remaining characters are only whitespace or ']' or  
+            // ',' or ':' or '{' or '}'. If that is so, then the text is safe for eval.  
+            if (/^[\],:{}\s]*$/.
+        test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@').
+            replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+            replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+
+                // In the third stage we use the eval function to compile the text into a  
+                // JavaScript structure. The '{' operator is subject to a syntactic ambiguity  
+                // in JavaScript: it can begin a block or an object literal. We wrap the text  
+                // in parens to eliminate the ambiguity.  
+
+                j = eval('(' + text + ')');
+
+                return j;
+            }
+
+            // If the text is not JSON parseable, then a SyntaxError is thrown.  
+            throw new SyntaxError('json_decode');
+        }
+
+        function json_encode(mixed_val) {
+            // Returns the JSON representation of a value  
+            //  
+            // version: 906.1806  
+            // discuss at: http://phpjs.org/functions/json_encode  
+            // +      original by: Public Domain (http://www.json.org/json2.js)  
+            // + reimplemented by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)  
+            // + improved by: T.J. Leahy  
+            // *     example 1: json_encode(['e', {pluribus: 'unum'}]);  
+            // *     returns 1: '[\n    "e",\n    {\n    "pluribus": "unum"\n}\n]'  
+            /* 
+            http://www.JSON.org/json2.js 
+            2008-11-19 
+            Public Domain. 
+            NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK. 
+            See http://www.JSON.org/js.html 
+            */
+            var json = this.window.JSON;
+            if (typeof json === 'object' && typeof json.stringify === 'function') {
+                return json.stringify(mixed_val);
+            }
+
+            var value = mixed_val;
+
+            var quote = function(string) {
+                var escapable = /[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
+                var meta = {    // table of character substitutions  
+                    '\b': '\\b',
+                    '\t': '\\t',
+                    '\n': '\\n',
+                    '\f': '\\f',
+                    '\r': '\\r',
+                    '"': '\\"',
+                    '\\': '\\\\'
+                };
+
+                escapable.lastIndex = 0;
+                return escapable.test(string) ?
+        '"' + string.replace(escapable, function(a) {
+            var c = meta[a];
+            return typeof c === 'string' ? c :
+            '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+        }) + '"' :
+        '"' + string + '"';
+            };
+
+            var str = function(key, holder) {
+                var gap = '';
+                var indent = '    ';
+                var i = 0;          // The loop counter.  
+                var k = '';          // The member key.  
+                var v = '';          // The member value.  
+                var length = 0;
+                var mind = gap;
+                var partial = [];
+                var value = holder[key];
+
+                // If the value has a toJSON method, call it to obtain a replacement value.  
+                if (value && typeof value === 'object' &&
+            typeof value.toJSON === 'function') {
+                    value = value.toJSON(key);
+                }
+
+                // What happens next depends on the value's type.  
+                switch (typeof value) {
+                    case 'string':
+                        return quote(value);
+
+                    case 'number':
+                        // JSON numbers must be finite. Encode non-finite numbers as null.  
+                        return isFinite(value) ? String(value) : 'null';
+
+                    case 'boolean':
+                    case 'null':
+                        // If the value is a boolean or null, convert it to a string. Note:  
+                        // typeof null does not produce 'null'. The case is included here in  
+                        // the remote chance that this gets fixed someday.  
+
+                        return String(value);
+
+                    case 'object':
+                        // If the type is 'object', we might be dealing with an object or an array or  
+                        // null.  
+                        // Due to a specification blunder in ECMAScript, typeof null is 'object',  
+                        // so watch out for that case.  
+                        if (!value) {
+                            return 'null';
+                        }
+
+                        // Make an array to hold the partial results of stringifying this object value.  
+                        gap += indent;
+                        partial = [];
+
+                        // Is the value an array?  
+                        if (Object.prototype.toString.apply(value) === '[object Array]') {
+                            // The value is an array. Stringify every element. Use null as a placeholder  
+                            // for non-JSON values.  
+
+                            length = value.length;
+                            for (i = 0; i < length; i += 1) {
+                                partial[i] = str(i, value) || 'null';
+                            }
+
+                            // Join all of the elements together, separated with commas, and wrap them in  
+                            // brackets.  
+                            v = partial.length === 0 ? '[]' :
+                    gap ? '[\n' + gap +
+                    partial.join(',\n' + gap) + '\n' +
+                    mind + ']' :
+                    '[' + partial.join(',') + ']';
+                            gap = mind;
+                            return v;
+                        }
+
+                        // Iterate through all of the keys in the object.  
+                        for (k in value) {
+                            if (Object.hasOwnProperty.call(value, k)) {
+                                v = str(k, value);
+                                if (v) {
+                                    partial.push(quote(k) + (gap ? ': ' : ':') + v);
+                                }
+                            }
+                        }
+
+                        // Join all of the member texts together, separated with commas,  
+                        // and wrap them in braces.  
+                        v = partial.length === 0 ? '{}' :
+                gap ? '{\n' + gap + partial.join(',\n' + gap) + '\n' +
+                mind + '}' : '{' + partial.join(',') + '}';
+                        gap = mind;
+                        return v;
+                }
+            };
+
+            // Make a fake root object containing our value under the key of ''.  
+            // Return the result of stringifying the value.  
+            return str('', {
+                '': value
+            });
+        } 
+       
+    </script>
+</head><body><input type="hidden" id="danhao" value="1842285135169144" /><div class="zhengwen"><div><span style="margin-left: 25px"></span>[<a class="pagelink"href="paper_1.htm">首页</a>&nbsp<a class="pagelink" href="#">上一页</a>&nbsp<a class="pagelink" href="paper_2.htm">下一页</a>&nbsp<a class="pagelink" href="paper_2.htm">尾页</a>&nbsp页码：1/2页]</div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">1</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">海南热带海洋学院 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">2</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">HAINAN TROPICAL OCEAN UNIVERSITY </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">3</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2012 届本科毕业论文（设计） </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">4</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">水果批发市场综合应用系统的设计与实现 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">5</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">学       院：        计算机工程学院           </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">6</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">专       业：          软件工程               </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">7</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">学 生 姓 名：            兰登科               </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">8</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">班       级：  12级2班     学号： 12241078   </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">9</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">指导教师姓名：  吴淑婷       职称：   讲师    </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">10</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">日       期：                                 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">11</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">海南热带海洋学院教务处  </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">12</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">二○一三年六月制 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">13</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">目    录 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">14</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">第一部分  设计说明书 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">15</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">一、设计说明书 &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip; 3 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">16</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">第二部分  过程管理资料 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">17</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">二、毕业论文（设计）课题任务书 &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip; 16 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">18</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">三、毕业论文（设计）开题报告 &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip; 18  </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">19</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">四、毕业论文（设计）中期报告 &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip; 22 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">20</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">五、毕业论文（设计）指导教师审阅表 &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip; 23 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">21</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">六、毕业论文（设计）评阅教师评阅表 &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip; 24 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">22</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">七、毕业论文（设计）答辩评审表 &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip; 25 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">23</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2012 届本科生毕业设计说明书 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">24</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">水果批发市场综合应用系统的设计与实现                     </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">25</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">学        院：	     计算机工程学院                                </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">26</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">专        业：	       软件工程                                                             </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">27</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">学 生 姓  名：	         兰登科                           </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">28</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">班        级：	12级2班                                                                                                                       	学号  12241078             </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">29</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">指导教师姓名：	 吴淑婷            	职称    讲师               </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">30</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">最终评定成绩	                             </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">31</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2016年3月  </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">32</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">水果批发市场综合应用系统的设计与实现 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">33</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">作者：兰登科 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">34</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">导师：吴淑婷 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">35</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">摘 要 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">36</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">	水果批发市场综合应用系统是为了提高水果批发市场中交易的效率而开发的项目，旨在通过计算机互联网技术介入交易，优化交易流程，减少交易环节， </span><span class="green">来减少交易花费的时间。 </span><span class="green">最大化买卖双方利益的同时，还向市场监管者提供了一种监管市场的渠道。 </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="35" /><input name="hid_save" type="button" onclick="submitPart('水果批发市场综合应用系统是为了提高水果批发市场中交易的效率而开发的项目，旨在通过计算机互联网技术介入交易，优化交易流程，减少交易环节，来减少交易花费的时间。最大化买卖双方利益的同时，还向市场监管者提供了一种监管市场的渠道。',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">37</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">	论文首先讨论了项目的背景及意义，然后对现有项目进行了对比分析。 </span><span class="green">其次，分析了项目的需求，确定了系统的功能，主要功能有买家下单、卖家进货、商品上架、用户登录、用户管理、店铺管理等。 </span><span class="green">最后讨论了各个功能的实现，并简要说明了系统的测试情况。 </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="36" /><input name="hid_save" type="button" onclick="submitPart('论文首先讨论了项目的背景及意义，然后对现有项目进行了对比分析。其次，分析了项目的需求，确定了系统的功能，主要功能有买家下单、卖家进货、商品上架、用户登录、用户管理、店铺管理等。最后讨论了各个功能的实现，并简要说明了系统的测试情况。',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">38</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">关键词：Java，Spring，Web，水果批发市场 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">39</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">Design and implementation of Fruit wholesale market comprehensive application system </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="38" /><input name="hid_save" type="button" onclick="submitPart('Design and implementation of Fruit wholesale market comprehensive application system',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">40</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">Author：Landengke </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">41</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">Tutor：Wushuting </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">42</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">ABSTRACT </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">43</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">	The development of Fruit wholesale market comprehensive application system is to improve the trade efficiency in fruit wholesale markets. </span><a href="../sentence_detail/48.htm" target="right" class="orange"> By using the computer Internet technology,</a><span class="green"> it can optimize the trade process and reduce the trade links in order to reduce transaction time. </span><a href="../sentence_detail/50.htm" target="right" class="orange"> The application of the system maximizes the benefits of buyers and sellers at the same time,</a><span class="green"> and it provides the market regulators with a new way to regulate market. </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="42" /><input name="hid_save" type="button" onclick="submitPart('The development of Fruit wholesale market comprehensive application system is to improve the trade efficiency in fruit wholesale markets.By using the computer Internet technology,it can optimize the trade process and reduce the trade links in order to reduce transaction time.The application of the system maximizes the benefits of buyers and sellers at the same time,and it provides the market regulators with a new way to regulate market.',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">44</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">	This paper discussed the background and importance of the project firstly and comparatively analysed the existing projects. </span><span class="green"> Secondly, </span><span class="green"> it analysed the requirements of system and determined functions that there are in the system, </span><span class="green"> mainly to enable customers to place orders, </span><span class="green"> sellers to replenish stocks and shelf goods, users to login in, </span><span class="green"> managers to manage users and stores and so on. </span><span class="green"> Finally, </span><span class="green"> it discussed the implements of these functions and briefly described the test results of the system. </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="43" /><input name="hid_save" type="button" onclick="submitPart('This paper discussed the background and importance of the project firstly and comparatively analysed the existing projects.Secondly,it analysed the requirements of system and determined functions that there are in the system,mainly to enable customers to place orders,sellers to replenish stocks and shelf goods, users to login in,managers to manage users and stores and so on.Finally,it discussed the implements of these functions and briefly described the test results of the system.',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">45</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">Keywords: Java, Spring, web, Fruit wholesale market </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="44" /><input name="hid_save" type="button" onclick="submitPart('Keywords: Java, Spring, web, Fruit wholesale market',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">46</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">目录 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">47</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">1 绪论	- 9 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">48</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">1.1 项目背景及意义	- 9 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">49</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">1.2 目前现有相关项目	- 9 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">50</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">1.2.1 易果网	- 9 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">51</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">1.2.1 朗玉水果销售管理系统	- 9 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">52</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">1.3论文研究的目的和内容	- 9 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">53</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2 系统需求分析	- 11 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">54</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2.1 系统需求目标	- 11 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">55</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2.2 系统可行性分析	- 12 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">56</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2.2.1 市场可行性	- 12 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">57</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2.2.2 技术可行性	- 12 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">58</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2.3 系统安全性需求分析	- 13 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">59</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2.4 系统可靠性需求分析	- 13 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">60</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2.5 系统性能需求分析	- 13 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">61</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2.6 系统数据库需求分析	- 13 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">62</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">3 系统开发关键技术	- 15 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">63</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">3.1 B/S架构	- 15 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">64</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">3.2 Java语言	- 15 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">65</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">3.3 Spring框架	- 15 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">66</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">3.4应用服务器和数据库	- 15 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">67</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">3.5 Redis	- 16 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">68</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">4  系统概要设计	- 17 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">69</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">4.1 系统功能模块结构设计	- 17 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">70</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">4.2 系统数据库设计	- 18 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">71</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">4.2.1 数据库设计说明	- 18 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">72</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">4.2.3 数据库详细设计	- 18 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">73</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">5  系统详细设计	- 24 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">74</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">5.1 页面详细设计	- 24 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">75</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">5.1.1 首页	- 24 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">76</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">5.1.2 注册	- 24 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">77</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">5.1.3 登录	- 25 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">78</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">5.1.4 卖家个人中心	- 25 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">79</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">5.1.5 买家个人中心	- 26 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">80</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">5.1.6 管理员个人中心	- 26 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">81</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">5.1.7 创建订单页	- 27 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">82</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">5.1.8 创建进货单	- 27 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">83</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">5.1.9 正在销售商品列表	- 27 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">84</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">5.1.10 商品详情	- 28 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">85</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">5.2 逻辑层详细设计	- 28 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">86</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">5.2.1 权限管理	- 28 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">87</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">5.2.1 用户注册	- 29 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">88</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">5.2.2 用户登录	- 29 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">89</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">5.2.3 进货及上架	- 30 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">90</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">5.2.3 买家向卖家下单	- 30 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">91</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">5.2.4 通过购物车向卖家下单	- 31 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">92</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">6 系统实现	- 33 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">93</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">6.1 买家注册页面	- 33 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">94</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">6.2 用户登录页面	- 33 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">95</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">6.3 管理员添加店铺页面	- 34 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">96</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">6.4 卖家进货页面	- 34 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">97</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">7 系统测试	- 35 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">98</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">7.1 测试方案	- 35 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">99</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">7.2 测试过程	- 35 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">100</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">7.2.1 用户注册测试	- 35 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">101</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">7.2.2 用户登录测试	- 37 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">102</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">7.2.3 卖家进货测试	- 38 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">103</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">7.3 测试结论	- 39 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">104</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">8 结  论	- 40 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">105</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">参考文献	- 41 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">106</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">附  录	- 42 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">107</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">致  谢	- 43 - </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">108</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">1 绪论 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">109</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">1.1 项目背景及意义 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">110</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">大型水果批发市场是区域范围内，水果产品的集散中心，其影响范围广泛，可覆盖多个省。 </span><span class="green">批发商将果农种植的水果集中到批发市场，销售给大型超市、个体商，这直接带动了当地的经济发展。 </span><span class="green">当前人民生活水平日益提高，水果也成了健康生活的必需品。 </span><span class="green">每天，水果批发市场内都会有大量的交易，而这些交易决定了我们日常生活中能不能吃到美味的水果。 </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="109" /><input name="hid_save" type="button" onclick="submitPart('大型水果批发市场是区域范围内，水果产品的集散中心，其影响范围广泛，可覆盖多个省。批发商将果农种植的水果集中到批发市场，销售给大型超市、个体商，这直接带动了当地的经济发展。当前人民生活水平日益提高，水果也成了健康生活的必需品。每天，水果批发市场内都会有大量的交易，而这些交易决定了我们日常生活中能不能吃到美味的水果。',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">111</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">水果批发市场一般地处城区边缘，紧邻主要道路，交通方便，便于大型货车将水果运进水果批发市场内，同时也方便向外销售。 </span><span class="green">市场内交易频繁，人员众多，如果采购水果时停留时间稍长，便容易造成交通拥堵，道路堵塞也会影响其他人的行动。 </span><span class="green">基于以上背景，产生了开发水果批发市场综合应用系统的想法。 </span><span class="green">借助互联网技术来解决现有问题，让互联网服务于我们的生活，使我们的生活更便捷。 </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="110" /><input name="hid_save" type="button" onclick="submitPart('水果批发市场一般地处城区边缘，紧邻主要道路，交通方便，便于大型货车将水果运进水果批发市场内，同时也方便向外销售。市场内交易频繁，人员众多，如果采购水果时停留时间稍长，便容易造成交通拥堵，道路堵塞也会影响其他人的行动。基于以上背景，产生了开发水果批发市场综合应用系统的想法。借助互联网技术来解决现有问题，让互联网服务于我们的生活，使我们的生活更便捷。',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">112</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">1.2 目前现有相关项目 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">113</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">1.2.1 易果网 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">114</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">易果网成立于2005年，作为中国第一家生鲜电商，其经营范围广泛，包含水果之外的各种生鲜食材。 </span><span class="green">其经营模式与实体水果批发市场截然不同，易果网主要面向个人，拥有自己的物流渠道，可送货到家。 </span><span class="green">这种新颖的经营模式是未来的主流模式。 </span><span class="green">易果网成立时间长，各种环节都已成熟，将来可取代水果批发市场，省去批发商的环节，更好的将优质产品送到消费者手中。 </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="113" /><input name="hid_save" type="button" onclick="submitPart('易果网成立于2005年，作为中国第一家生鲜电商，其经营范围广泛，包含水果之外的各种生鲜食材。其经营模式与实体水果批发市场截然不同，易果网主要面向个人，拥有自己的物流渠道，可送货到家。这种新颖的经营模式是未来的主流模式。易果网成立时间长，各种环节都已成熟，将来可取代水果批发市场，省去批发商的环节，更好的将优质产品送到消费者手中。',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">115</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">1.2.1 朗玉水果销售管理系统 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">116</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><a href="../sentence_detail/140.htm" target="right" class="orange">朗玉水果销售管理系统是一款与本系统功能相似的应用管理软件，经过多年市场的应用和软件升级，功能比较完善。</a><span class="green">但该系统是C/S架构，需要购买者在使用的计算机上安装应用程序以及MySQL数据库，需要一定的计算机知识，使用较为复杂。 </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="115" /><input name="hid_save" type="button" onclick="submitPart('朗玉水果销售管理系统是一款与本系统功能相似的应用管理软件，经过多年市场的应用和软件升级，功能比较完善。但该系统是C/S架构，需要购买者在使用的计算机上安装应用程序以及MySQL数据库，需要一定的计算机知识，使用较为复杂。',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">117</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">1.3论文研究的目的和内容 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">118</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">本文基于对水果批发市场综合应用系统的建设，介绍了从需求分析，系统设计到实现的过程。 </span><span class="green">基于对现有项目的分析，本文探讨的项目是一种面向水果批发市场内的卖家和买家的网站，整个系统实现了水果批发市场内卖家和买家常用的典型的功能， </span><span class="green">可为这些人群带来更大的便利。 </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="117" /><input name="hid_save" type="button" onclick="submitPart('本文基于对水果批发市场综合应用系统的建设，介绍了从需求分析，系统设计到实现的过程。基于对现有项目的分析，本文探讨的项目是一种面向水果批发市场内的卖家和买家的网站，整个系统实现了水果批发市场内卖家和买家常用的典型的功能，可为这些人群带来更大的便利。',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">119</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2 系统需求分析 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">120</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2.1 系统需求目标 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">121</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">系统目标是能够成为水果批发市场中买卖双发的交易平台。 </span><span class="green">买家通过系统向卖家下订单，卖家可以根据自己的库存信息，选择接受订单，而后备货，等待买家取货，完成交易。 </span><span class="green">卖家将进货单录入系统，交易完成后，系统可给出卖家的销售统计信息。 </span><span class="green">市场管理人员可以通过系统发布市场公告，维护市场内的店铺信息，锁定恶意用户。 </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="120" /><input name="hid_save" type="button" onclick="submitPart('系统目标是能够成为水果批发市场中买卖双发的交易平台。买家通过系统向卖家下订单，卖家可以根据自己的库存信息，选择接受订单，而后备货，等待买家取货，完成交易。卖家将进货单录入系统，交易完成后，系统可给出卖家的销售统计信息。市场管理人员可以通过系统发布市场公告，维护市场内的店铺信息，锁定恶意用户。',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">122</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">表2.1 系统功能表  </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">123</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">续表2.1 系统功能表 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">124</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">系统用例图如下： </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">125</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">图2.1 系统用例图 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">126</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2.2 系统可行性分析 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">127</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2.2.1 市场可行性 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">128</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">	目前，市场上关于水果批发市场现有的软件大都是C/S架构，不光购买花费高昂，部署安装也很复杂，需要有一定计算机专业知识的人员才能安装， </span><span class="green">而且日后的升级维护也是个难题。 </span><span class="green">而本系统基于B/S架构，不存在以上问题，故市场可行性较强。 </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="127" /><input name="hid_save" type="button" onclick="submitPart('目前，市场上关于水果批发市场现有的软件大都是C/S架构，不光购买花费高昂，部署安装也很复杂，需要有一定计算机专业知识的人员才能安装，而且日后的升级维护也是个难题。而本系统基于B/S架构，不存在以上问题，故市场可行性较强。',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">129</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2.2.2 技术可行性 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">130</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><a href="../sentence_detail/162.htm" target="right" class="orange">	目前，关于web开发已经有很多成熟的模式，尤其是J2EE，有很多开源的框架，比较流行的有Spring,struts等。</a><span class="green">就当前掌握的前端知识，例如html,jQuery，开发一般的网页也比较容易。 </span><span class="green">所以只要利用好现有技术，就足够完成开发任务，在技术上没有问题。 </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="129" /><input name="hid_save" type="button" onclick="submitPart('目前，关于web开发已经有很多成熟的模式，尤其是J2EE，有很多开源的框架，比较流行的有Spring,struts等。就当前掌握的前端知识，例如html,jQuery，开发一般的网页也比较容易。所以只要利用好现有技术，就足够完成开发任务，在技术上没有问题。',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">131</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2.3 系统安全性需求分析 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">132</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">	系统中保存着许多个人敏感信息和买卖双方的交易记录，这些信息需要妥善保存，但由于时间关系，在系统中并没有做精细的数据权限的控制， </span><span class="green">只是对用户的行为进行控制。 </span><span class="green">如买家只能浏览信息，卖家才能编辑一些商品信息，只有管理员才能编辑店铺信息等。 </span><span class="green">此外，要提高系统的安全性，还要考虑网络传输，数据库服务器断电后的数据恢复等多个方面[ ]。 </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="131" /><input name="hid_save" type="button" onclick="submitPart('系统中保存着许多个人敏感信息和买卖双方的交易记录，这些信息需要妥善保存，但由于时间关系，在系统中并没有做精细的数据权限的控制，只是对用户的行为进行控制。如买家只能浏览信息，卖家才能编辑一些商品信息，只有管理员才能编辑店铺信息等。此外，要提高系统的安全性，还要考虑网络传输，数据库服务器断电后的数据恢复等多个方面[ ]。',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">133</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2.4 系统可靠性需求分析 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">134</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">	商业交易设计大量数据，因此保证数据正确十分必要。 </span><span class="green">考虑到系统中有很多数据需要用户输入，故数据的校验要十分全面，如果用户输入的数据有问题，则给予提示，否则错误的数据进入系统，有可能引起意想不到的问题。 </span><span class="green">数据校验不光只在前端页面进行，数据进入后台系统后，也需要进行充分的校验，保证没有错误数据。 </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="133" /><input name="hid_save" type="button" onclick="submitPart('商业交易设计大量数据，因此保证数据正确十分必要。考虑到系统中有很多数据需要用户输入，故数据的校验要十分全面，如果用户输入的数据有问题，则给予提示，否则错误的数据进入系统，有可能引起意想不到的问题。数据校验不光只在前端页面进行，数据进入后台系统后，也需要进行充分的校验，保证没有错误数据。',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">135</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2.5 系统性能需求分析 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">136</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">	水果批发市场的交易高峰期在早晨五六点钟，尤其是节假日，交易量更大。 </span><span class="green">因此，系统需要能够承受一定量的并发访问，并且交易高峰期也要有较好的访问和响应速度。 </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="135" /><input name="hid_save" type="button" onclick="submitPart('水果批发市场的交易高峰期在早晨五六点钟，尤其是节假日，交易量更大。因此，系统需要能够承受一定量的并发访问，并且交易高峰期也要有较好的访问和响应速度。',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">137</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">2.6 系统数据库需求分析 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">138</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">	该系统的数据库不仅要存储数据，还要将数据之间的关系保存下来。 </span><span class="green">图2.2用实体关系（E-R）图描述该系统主要的数据库表及表之间的关系。 </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="137" /><input name="hid_save" type="button" onclick="submitPart('该系统的数据库不仅要存储数据，还要将数据之间的关系保存下来。图2.2用实体关系（E-R）图描述该系统主要的数据库表及表之间的关系。',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">139</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">图2.2 系统E-R图 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">140</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">3 系统开发关键技术 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">141</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">3.1 B/S架构 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">142</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">	本系统遵循B/S架构开发。 </span><a href="../sentence_detail/184.htm" target="right" class="red">随着Web 2.0时代的到来，软件的网络架构正从传统的C/S架构逐渐向更方便快捷的B/S架构转变，B/S架构大大简化了用户使用网络应用的难度，</a><span class="green">进一步推动了互联网的繁荣[ ]。 </span><span class="green">B/S架构具有两个优点，一是客户端使用统一的浏览器，二是服务端基于统一的HTTP协议，这大大降低了网站用户、维护人员和开发人员的学习成本。 </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="141" /><input name="hid_save" type="button" onclick="submitPart('本系统遵循B/S架构开发。随着Web 2.0时代的到来，软件的网络架构正从传统的C/S架构逐渐向更方便快捷的B/S架构转变，B/S架构大大简化了用户使用网络应用的难度，进一步推动了互联网的繁荣[ ]。B/S架构具有两个优点，一是客户端使用统一的浏览器，二是服务端基于统一的HTTP协议，这大大降低了网站用户、维护人员和开发人员的学习成本。',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">143</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">	本系统的界面由HTML实现，HTML结合B/S架构，可完全分离前端和后端，只要定义好接口的数据格式，二者的开发可由不同的开发人员同时进行， </span><span class="green">这大大提高了网站的开发效率。 </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="142" /><input name="hid_save" type="button" onclick="submitPart('本系统的界面由HTML实现，HTML结合B/S架构，可完全分离前端和后端，只要定义好接口的数据格式，二者的开发可由不同的开发人员同时进行，这大大提高了网站的开发效率。',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">144</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">3.2 Java语言 </span><p></p></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">145</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">Java是目前最流行的面向对象编程语言之一，其用户众多，社区庞大，遇到问题又很容易通过前人的经验得到解决， </span><span class="green">这使得更多的人选择了Java来作为自己的开发语言[ ]。 </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="144" /><input name="hid_save" type="button" onclick="submitPart('Java是目前最流行的面向对象编程语言之一，其用户众多，社区庞大，遇到问题又很容易通过前人的经验得到解决，这使得更多的人选择了Java来作为自己的开发语言[ ]。',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">146</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">Java具有以下特点：简单、面向对象、支持分布式、可跨平台、高性能、多线程、动态加载[ ]。 </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="145" /><input name="hid_save" type="button" onclick="submitPart('Java具有以下特点：简单、面向对象、支持分布式、可跨平台、高性能、多线程、动态加载[ ]。',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">147</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">基于Java的以上优点和笔者对Java相对丰富的经验，我们选择Java作为项目的开发语言。 </span><p></p> <div align="right" class="modifyall" onclick="mydivclick(event,this)" ><input name="hid_para" type="hidden" value="146" /><input name="hid_save" type="button" onclick="submitPart('基于Java的以上优点和笔者对Java相对丰富的经验，我们选择Java作为项目的开发语言。',this)" class="modify"><font color="red">段落修改</font></div></div><div> <p></p><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" width="50"><div class="shubu">148</div></td> <td>&nbsp;&nbsp;</td></tr></tbody> </table><span style="margin-left: 25px"></span><span class="green">3.3 Spring框架 </span><p></p></div><div><span style="margin-left: 25px"></span>[<a class="pagelink"href="paper_1.htm">首页</a>&nbsp<a class="pagelink" href="#">上一页</a>&nbsp<a class="pagelink" href="paper_2.htm">下一页</a>&nbsp<a class="pagelink" href="paper_2.htm">尾页</a>&nbsp页码：1/2页]</div> </div><div class="zhengwencenter"><p>检测报告由<a href="http://www.ptcheck.com" target="_blank">PTcheck</a>文献相似度检测系统生成</p><p>Copyright © 2007-2015 PTcheck.</p></div><div style="margin-bottom: 400px"></div></body></html>
