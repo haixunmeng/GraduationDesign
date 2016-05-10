@@ -1,0 +1,566 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>PTcheck_检测报告</title>
+<style type="text/css">
+body {
+margin:0;
+padding:0 0 0 0;
+font-size:12px;
+}
+html
+{
+overflow-x:hidden;
+overflow-y:auto;
+}
+html, body, .ppc {
+height: 100%;
+}
+a:link, a:visited, a:active, a:focus {
+color:#666;
+}
+a:hover {
+color:#09f;
+}
+.bt1 {
+font-size: 24px;
+font-family: "微软雅黑";
+}
+.bt2 {
+font-size: 12px;
+color:#999;
+}
+.getiao {
+width: 100%;
+height: 46px;
+background-image: url(images/pps_04.gif);
+overflow: hidden;
+}
+.getiao_xsd {
+float: left;
+width: 220px;
+display: inline;
+}
+.getiao_wz {
+width: 75px;
+float: left;
+margin-top: 14px;
+margin-left: 0px;
+display: inline;
+}
+.getiao_percent {
+width: 30px;
+float: left;
+margin-top: 13px;
+margin-left: 0px;
+display: inline;
+}
+.getiao img {
+border: 1px solid #666666;
+margin-top: 11px;
+float: left;
+}
+.getiao_an {
+float: right;
+height: 30px;
+width: 400px;
+margin-top: 5px;
+display: block;text-align: right;
+
+}
+.getiao_an a {
+float: left;
+height: 20px;
+padding-top: 7px;
+padding-right: 10px;
+padding-left: 10px;
+overflow: hidden;
+background-repeat: repeat-x;
+border: 1px solid #939393;
+text-decoration: none;
+color: #666;
+margin-right: 3px;
+margin-left: 3px;
+}
+.getiao_an a:link, .getiao_an a:visited, .getiao_an a:active, .getiao_an a:focus {
+background-image: url(images/pps_an.gif);
+}
+.getiao_an a:hover {
+background-image: url(images/pps_anx.gif);
+}
+.top {
+background-color:#E2E2E2;
+height: 8px;
+margin:0;
+padding:0 0 0 0;
+}
+.bottom {
+background-image: url(images/di.gif);
+background-repeat: repeat-x;
+width: 100%;
+display: block;
+height: 40px;
+bottom: 0px;
+vertical-align: bottom;
+margin-bottom: 0px;
+position:relative;
+left: 0px;
+overflow: hidden;
+}
+.left, .right {
+background-repeat: repeat-y;
+width: 31px;
+vertical-align: top;
+position: relative;
+height: 100%
+overflow: hidden;
+}
+.left {
+background-image: url(images/pps_left.gif);
+}
+.right {
+background-image: url(images/pps_right.gif);
+
+}
+</style>
+<script type="text/javascript">
+        var _allMessage;
+       
+      
+        function getClass(tagname, className) { //tagname指元素，className指class的值
+                var tagname = document.getElementsByTagName(tagname);  //获取指定元素
+                var tagnameAll = [];     //这个数组用于存储所有符合条件的元素
+                for (var i = 0; i < tagname.length; i++) {     //遍历获得的元素
+                    if (tagname[i].className == className) {     //如果获得的元素中的class的值等于指定的类名，就赋值给tagnameAll
+                        tagnameAll[tagnameAll.length] = tagname[i];
+                    }
+                }
+                return tagnameAll;
+            
+        }
+
+        var danhao;
+        var modifyPara = new Array();
+        function myset(paraseq, sen) {
+            var reg = new RegExp("\"", "g")
+            var model = "{\"para\":\"" + paraseq + "\",\"text\": \"" + sen + "\"}";
+            var mo = eval("(" + model + ")");
+            var exist = false;
+            for (var i = 0; i < modifyPara.length; i++) {
+                if (mo.para == modifyPara[i].para) {
+                    exist = true;
+                    modifyPara[i].text = mo.text;
+                }
+            }
+            if (!exist) {
+                modifyPara.push(mo);
+            }
+            delCookie(danhao);
+            setCookie(danhao, json_encode(modifyPara));
+        }
+        function trimStr(str) {
+
+            if ((typeof (str) != "string") || !str) {
+
+                return "";
+
+            }
+
+            return str.replace(/(^\s*)|(\s*$)/g, "");
+
+        }
+
+        window.onload = function() {
+        danhao = trimStr(getClass("td", "bt1")[0].innerHTML);
+            //delCookie(danhao);
+            var result = getCookie(danhao);
+
+            if (result) {
+                modifyPara = eval("(" + result + ")");
+                //初始化子页面
+                //document.frames('ViewMain').location.reload();
+                // document.all.ViewMain.document.location.reload();
+
+                ViewMain.window.location.href = ViewMain.window.location.href;
+
+            }
+
+        }
+
+
+        //写cookies
+        function setCookie(name, value) {
+            var Days = 30;
+            var exp = new Date();
+            exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+            document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+        }
+
+        //读取cookies 
+        function getCookie(name) {
+            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+
+            if (arr = document.cookie.match(reg)) return unescape(arr[2]);
+            else return null;
+        }
+
+        //删除cookies 
+        function delCookie(name) {
+            var exp = new Date();
+            exp.setTime(exp.getTime() - 1);
+            var cval = getCookie(name);
+            if (cval != null) document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
+        }
+
+
+        function json_decode(str_json) {
+            // Decodes the JSON representation into a PHP value  
+            //  
+            // version: 906.1806  
+            // discuss at: http://phpjs.org/functions/json_decode  
+            // +      original by: Public Domain (http://www.json.org/json2.js)  
+            // + reimplemented by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)  
+            // + improved by: T.J. Leahy  
+            // *     example 1: json_decode('[\n    "e",\n    {\n    "pluribus": "unum"\n}\n]');  
+            // *     returns 1: ['e', {pluribus: 'unum'}]  
+            /* 
+            http://www.JSON.org/json2.js 
+            2008-11-19 
+            Public Domain. 
+            NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK. 
+            See http://www.JSON.org/js.html 
+            */
+
+            var json = this.window.JSON;
+            if (typeof json === 'object' && typeof json.parse === 'function') {
+                return json.parse(str_json);
+            }
+
+            var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
+            var j;
+            var text = str_json;
+
+            // Parsing happens in four stages. In the first stage, we replace certain  
+            // Unicode characters with escape sequences. JavaScript handles many characters  
+            // incorrectly, either silently deleting them, or treating them as line endings.  
+            cx.lastIndex = 0;
+            if (cx.test(text)) {
+                text = text.replace(cx, function(a) {
+                    return '\\u' +
+            ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+                });
+            }
+
+            // In the second stage, we run the text against regular expressions that look  
+            // for non-JSON patterns. We are especially concerned with '()' and 'new'  
+            // because they can cause invocation, and '=' because it can cause mutation.  
+            // But just to be safe, we want to reject all unexpected forms.  
+
+            // We split the second stage into 4 regexp operations in order to work around  
+            // crippling inefficiencies in IE's and Safari's regexp engines. First we  
+            // replace the JSON backslash pairs with '@' (a non-JSON character). Second, we  
+            // replace all simple value tokens with ']' characters. Third, we delete all  
+            // open brackets that follow a colon or comma or that begin the text. Finally,  
+            // we look to see that the remaining characters are only whitespace or ']' or  
+            // ',' or ':' or '{' or '}'. If that is so, then the text is safe for eval.  
+            if (/^[\],:{}\s]*$/.
+        test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@').
+            replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+            replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+
+                // In the third stage we use the eval function to compile the text into a  
+                // JavaScript structure. The '{' operator is subject to a syntactic ambiguity  
+                // in JavaScript: it can begin a block or an object literal. We wrap the text  
+                // in parens to eliminate the ambiguity.  
+
+                j = eval('(' + text + ')');
+
+                return j;
+            }
+
+            // If the text is not JSON parseable, then a SyntaxError is thrown.  
+            throw new SyntaxError('json_decode');
+        }
+
+        function json_encode(mixed_val) {
+            // Returns the JSON representation of a value  
+            //  
+            // version: 906.1806  
+            // discuss at: http://phpjs.org/functions/json_encode  
+            // +      original by: Public Domain (http://www.json.org/json2.js)  
+            // + reimplemented by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)  
+            // + improved by: T.J. Leahy  
+            // *     example 1: json_encode(['e', {pluribus: 'unum'}]);  
+            // *     returns 1: '[\n    "e",\n    {\n    "pluribus": "unum"\n}\n]'  
+            /* 
+            http://www.JSON.org/json2.js 
+            2008-11-19 
+            Public Domain. 
+            NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK. 
+            See http://www.JSON.org/js.html 
+            */
+            var json = this.window.JSON;
+            if (typeof json === 'object' && typeof json.stringify === 'function') {
+                return json.stringify(mixed_val);
+            }
+
+            var value = mixed_val;
+
+            var quote = function(string) {
+                var escapable = /[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
+                var meta = {    // table of character substitutions  
+                    '\b': '\\b',
+                    '\t': '\\t',
+                    '\n': '\\n',
+                    '\f': '\\f',
+                    '\r': '\\r',
+                    '"': '\\"',
+                    '\\': '\\\\'
+                };
+
+                escapable.lastIndex = 0;
+                return escapable.test(string) ?
+        '"' + string.replace(escapable, function(a) {
+            var c = meta[a];
+            return typeof c === 'string' ? c :
+            '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+        }) + '"' :
+        '"' + string + '"';
+            };
+
+            var str = function(key, holder) {
+                var gap = '';
+                var indent = '    ';
+                var i = 0;          // The loop counter.  
+                var k = '';          // The member key.  
+                var v = '';          // The member value.  
+                var length = 0;
+                var mind = gap;
+                var partial = [];
+                var value = holder[key];
+
+                // If the value has a toJSON method, call it to obtain a replacement value.  
+                if (value && typeof value === 'object' &&
+            typeof value.toJSON === 'function') {
+                    value = value.toJSON(key);
+                }
+
+                // What happens next depends on the value's type.  
+                switch (typeof value) {
+                    case 'string':
+                        return quote(value);
+
+                    case 'number':
+                        // JSON numbers must be finite. Encode non-finite numbers as null.  
+                        return isFinite(value) ? String(value) : 'null';
+
+                    case 'boolean':
+                    case 'null':
+                        // If the value is a boolean or null, convert it to a string. Note:  
+                        // typeof null does not produce 'null'. The case is included here in  
+                        // the remote chance that this gets fixed someday.  
+
+                        return String(value);
+
+                    case 'object':
+                        // If the type is 'object', we might be dealing with an object or an array or  
+                        // null.  
+                        // Due to a specification blunder in ECMAScript, typeof null is 'object',  
+                        // so watch out for that case.  
+                        if (!value) {
+                            return 'null';
+                        }
+
+                        // Make an array to hold the partial results of stringifying this object value.  
+                        gap += indent;
+                        partial = [];
+
+                        // Is the value an array?  
+                        if (Object.prototype.toString.apply(value) === '[object Array]') {
+                            // The value is an array. Stringify every element. Use null as a placeholder  
+                            // for non-JSON values.  
+
+                            length = value.length;
+                            for (i = 0; i < length; i += 1) {
+                                partial[i] = str(i, value) || 'null';
+                            }
+
+                            // Join all of the elements together, separated with commas, and wrap them in  
+                            // brackets.  
+                            v = partial.length === 0 ? '[]' :
+                    gap ? '[\n' + gap +
+                    partial.join(',\n' + gap) + '\n' +
+                    mind + ']' :
+                    '[' + partial.join(',') + ']';
+                            gap = mind;
+                            return v;
+                        }
+
+                        // Iterate through all of the keys in the object.  
+                        for (k in value) {
+                            if (Object.hasOwnProperty.call(value, k)) {
+                                v = str(k, value);
+                                if (v) {
+                                    partial.push(quote(k) + (gap ? ': ' : ':') + v);
+                                }
+                            }
+                        }
+
+                        // Join all of the member texts together, separated with commas,  
+                        // and wrap them in braces.  
+                        v = partial.length === 0 ? '{}' :
+                gap ? '{\n' + gap + partial.join(',\n' + gap) + '\n' +
+                mind + '}' : '{' + partial.join(',') + '}';
+                        gap = mind;
+                        return v;
+                }
+            };
+
+            // Make a fake root object containing our value under the key of ''.  
+            // Return the result of stringifying the value.  
+            return str('', {
+                '': value
+            });
+        } 
+    </script>
+</head>
+
+<body>
+<div>
+<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td class="left"><img src="images/pps_02_.gif" width="31" height="198" /></td>
+<td valign="top" align="center">
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td class="top"></td>
+</tr>
+<tr>
+<td valign="top" align="center">
+
+<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="10px" height="80"></td>
+<td width="182px" height="80" align="left"><a target="_blank" href="http://www.ptcheck.com"><img border="0" src="images/PTcheck_logo.png" /></a></td>
+<td width="30">
+</td>
+<td align="center">
+
+<table border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td class="bt1">1870656652199144</td>
+</tr>
+<tr>
+<td class="bt2">作者：18706566521991441 论文提交时间：2016-5-5 18:02:56  报告防伪编码:<b>30e4c5ce-080e-4d8b-926e-595067ffc135</b>
+<a href="http://www.ptcheck.com/ordercheck.aspx" target="_blank" style="margin-left:5px;">查询真伪</a>
+</td>
+</tr>
+<tr>
+<td>
+<div  style="color:red;font-size:14px;padding-top:2px;"><b>公告：如果有任何疑问，请点击右上方的联系客服按钮！PTcheck全心为您服务！</b></div>
+</td>
+</tr>
+</table>
+
+</td>
+<td width="153" align="right">
+<div style="color:#666; list-style-type: none; line-height: 20px;margin:10px">
+
+<table width="100px" border="0" cellspacing="0" cellpadding="0">
+<tr><td align="left">论文字数：10742</td></tr>
+
+<tr><td align="left">段落个数：306</td></tr>
+
+<tr><td align="left">句子个数：410</td></tr>
+</table>
+
+</div>
+
+</td>
+<td width="40">
+</td>
+</tr>
+</table>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" align="center">
+
+<div class="getiao">
+
+<div style="margin-left: 20px;">
+<div class="getiao_xsd">
+<div class="getiao_wz">文章相似度：</div>
+<img src="images/percent_1.gif" width="90" height="15" />
+<div class="getiao_percent">9%</div>
+</div>
+
+
+</div>
+
+<div class="getiao_an" style="width: 580px; height: 85px">
+
+<a href="htmls/detail_report.htm" target='ViewMain'>
+详细报告
+</a>
+<a style="color:red;" href="http://www.ptcheck.com/jack/pt.aspx" target='_blank'>
+<b>点我检测</b>
+</a>
+<a style="color:red;" href="htmls/comprehensive_assessment.htm" target='ViewMain'>
+<b>综合评估</b>
+</a>
+<a style="color: red" href="htmls/jiangchong_.htm" target='ViewMain'><b>修改文档</b>                                          
+</a>
+
+<a style="color:red;" href="htmls/PDF/PDFreport.pdf" target='_blank'>
+<b>打印PDF</b>
+</a>
+<a style="color:red;" href="https://amos.alicdn.com/getcid.aw?site=cntaobao&groupid=0&s=1&uid=%BD%AD%CE%DE%D4%C2" target='_blank'>
+<b>联系客服</b>
+</a>
+<a href="htmls/help.htm" target='ViewMain'>
+使用帮助
+</a>
+
+</div>
+
+</div>
+
+</td>
+</tr>
+<tr>
+<td valign="top" align="center">
+
+<iframe width="100%" src="htmls/detail_report.htm" align="center" height="600px" name="ViewMain" id="ViewMain" frameborder="0"  scrolling="no">
+</iframe>
+
+</td>
+</tr>
+</table>
+</td>
+<td class="right"><img src="images/pps_02.gif" width="31" height="198" /></td>
+</tr>
+</table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td align="left" width="50%">
+<div class="bottom">
+<img src="images/pps_06_.gif" />
+</div>
+<td>
+<td align="right"  width="50%">
+<div class="bottom">
+<img src="images/pps_06.gif"/>
+</div>
+<td>
+</tr>
+</table>
+
+</div>
+</body>
+</html>
